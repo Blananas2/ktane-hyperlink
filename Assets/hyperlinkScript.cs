@@ -49,7 +49,7 @@ public class hyperlinkScript : MonoBehaviour {
     string screwString = "";
     string connectionLink;
     int step;
-    int selectedIcon = 60;
+    int selectedIcon = 61;
     private readonly List<string> colorString = new List<string> { "0FF", "08F", "888", "F80", "FFF", "8F0", "00F", "FF8", "808", "F0F", "0F0", "F8F", "080", "FF0", "800", "8F8", "008", "880", "88F", "F08", "F88", "F00", "0F8", "000", "088", "8FF", "80F" };
 
     private readonly List<int> index = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 };
@@ -86,7 +86,7 @@ public class hyperlinkScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-	    selectedID = Random.Range(0, 121);
+	    selectedID = Random.Range(0, 123);
         anchor = 2 * selectedID;
         _webSocketManager = new hyperlinkWebSocketManager(this, GetData(selectedID));
     }
@@ -164,8 +164,8 @@ public class hyperlinkScript : MonoBehaviour {
                 btn = 1;
             }
 
-            if (selectedIcon == -1) { selectedIcon = 120; }
-            if (selectedIcon == 121) { selectedIcon = 0; }
+            if (selectedIcon == -1) { selectedIcon = 122; }
+            if (selectedIcon == 123) { selectedIcon = 0; }
             Back.GetComponent<Renderer>().material = IconMats[selectedIcon];
             StartCoroutine(HoldChecker());
         }
@@ -260,8 +260,8 @@ public class hyperlinkScript : MonoBehaviour {
             } else {
                 selectedIcon = selectedIcon + 1;
             }
-            if (selectedIcon == -1) { selectedIcon = 120; }
-            if (selectedIcon == 121) { selectedIcon = 0; }
+            if (selectedIcon == -1) { selectedIcon = 122; }
+            if (selectedIcon == 123) { selectedIcon = 0; }
             Back.GetComponent<Renderer>().material = IconMats[selectedIcon];
             yield return new WaitForSeconds(0.075f);
             goto backHere;
@@ -296,7 +296,7 @@ public class hyperlinkScript : MonoBehaviour {
                 RGB[0].GetComponent<Renderer>().material = OtherMats[2];
                 RGB[1].GetComponent<Renderer>().material = OtherMats[2];
                 RGB[2].GetComponent<Renderer>().material = OtherMats[2];
-                selectedIcon = 60;
+                selectedIcon = 61;
                 Back.GetComponent<Renderer>().material = IconMats[60];
             }
             else if (step == 0)
