@@ -7,11 +7,15 @@ public class hyperlinkWebSocketManager
 	private readonly string _data;
 	private WebSocket _ws;
 
-	public hyperlinkWebSocketManager(hyperlinkScript module, string data)
+	public hyperlinkWebSocketManager(hyperlinkScript module, string data, bool offlineForced = false)
 	{
 		_module = module;
 		_data = data;
-		StartThread();
+		if (offlineForced) {
+			UnityMainThreadDispatcher.Instance().Enqueue(_module.ConnectionLost(true));
+		} else {
+			StartThread();
+		}
 	}
 
 	private static readonly string WebSocketURL = "ws://hyperlinkserver.eltrick.uk";
@@ -85,7 +89,7 @@ public class hyperlinkWebSocketManager
 
 	private void ConnectionLost()
 	{
-		UnityMainThreadDispatcher.Instance().Enqueue(_module.ConnectionLost());
+		UnityMainThreadDispatcher.Instance().Enqueue(_module.ConnectionLost(false));
 	}
 
 	private void OnError(object sender, ErrorEventArgs e)

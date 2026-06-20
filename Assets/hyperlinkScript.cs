@@ -71,8 +71,20 @@ public class hyperlinkScript : MonoBehaviour {
     
     private const int numberOfLetters = 11;
 
+    private HyperlinkSettings Settings = new HyperlinkSettings();
+    bool ForceOffline;
+
     void Awake () {
         moduleId = moduleIdCounter++;
+
+        if (!Application.isEditor) {
+            ModConfig<HyperlinkSettings> modConfig = new ModConfig<HyperlinkSettings>("HyperlinkSettings");
+            Settings = modConfig.Settings;
+            modConfig.Settings = Settings;
+        }
+
+        ForceOffline = Application.isEditor ? true : Settings.ForceOffline;
+        Debug.LogFormat("<The Hyperlink #{0}> Force Offline: {1}", moduleId, ForceOffline);
 
         foreach (KMSelectable arrow in Arrows) {
             KMSelectable pressedArrow = arrow;
@@ -88,7 +100,7 @@ public class hyperlinkScript : MonoBehaviour {
     void Start () {
 	    selectedID = Random.Range(0, 123);
         anchor = 2 * selectedID;
-        _webSocketManager = new hyperlinkWebSocketManager(this, GetData(selectedID));
+        _webSocketManager = new hyperlinkWebSocketManager(this, GetData(selectedID), ForceOffline);
     }
 
     private string GetData(int selectedId)
@@ -223,10 +235,14 @@ public class hyperlinkScript : MonoBehaviour {
 
         UpdateText();
 
-        Debug.LogFormat(
+        if (!ForceOffline)
+        {
+            Debug.LogFormat(
             error
                 ? "[The Hyperlink #{0}] The module failed to connect the the server, use the YouTube link instead."
-                : "[The Hyperlink #{0}] The module connected to the server.", moduleId);
+                : "[The Hyperlink #{0}] The module connected to the server.", moduleId);   
+        }
+
         for (int a = 0; a < 11; a++)
         {
             Debug.LogFormat("[The Hyperlink #{0}] Encoding {1}: '{2}' in {3} => '{4}' => {5}", moduleId, a + 1, screwList[a].Replace("\n", ""), encodings[index[a]], charList[a].Replace("\n", ""), selectedString[a] );
@@ -240,9 +256,9 @@ public class hyperlinkScript : MonoBehaviour {
         TopNumber.text = "1";
     }
 
-    public IEnumerator ConnectionLost()
+    public IEnumerator ConnectionLost(bool deliberate)
     {
-        Debug.LogFormat("[The Hyperlink #{0}] The module has lost its connection to the server and will now use the YouTube link instead.", moduleId);
+        Debug.LogFormat("[The Hyperlink #{0}] The module has {1} use the YouTube link instead.", moduleId, deliberate ? "a mod setting enabled which makes it" : "lost its connection to the server and will now");
         ConnectionLED.material = OtherMats[7];
         StartCoroutine(ConnectionError());
         yield return null;
@@ -751,6 +767,28 @@ public class hyperlinkScript : MonoBehaviour {
              screwString = screwString.Replace(string.Format(" {0} ", nonsense[p]), string.Format(" {0} ", o[p]));
          }
     }
+
+    class HyperlinkSettings
+    {
+        public bool ForceOffline = false;
+    }
+
+    static Dictionary<string, object>[] TweaksEditorSettings = new Dictionary<string, object>[]
+    {
+        new Dictionary<string, object>
+        {
+            { "Filename", "HyperlinkSettings.json" },
+            { "Name", "The Hyperlink Settings" },
+            { "Listings", new List<Dictionary<string, object>>{
+                new Dictionary<string, object>
+                {
+                    { "Key", "ForceOffline" },
+                    { "Text", "Force Offline" },
+                    { "Description", "Prevents the module from attempting to connect to the internet. Only use if the module doesn't work for you." }
+                }
+            } }
+        }
+    };
 
     //twitch plays
     private bool moveValid(string s) 
