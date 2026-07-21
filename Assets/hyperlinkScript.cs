@@ -922,7 +922,7 @@ public class hyperlinkScript : MonoBehaviour {
                         modname = modname.Replace(" (instance)", "");
                         yield return new WaitForSeconds(0.05f);
                         counter++;
-                        if (counter == 121)
+                        if (counter == 123)
                         {
                             yield return string.Format("sendtochaterror '{0}' is not a valid module name!", module);
                             yield break;
@@ -933,7 +933,7 @@ public class hyperlinkScript : MonoBehaviour {
                 {
                     int ctleft = 0;
                     int ctright = 0;
-                    int curindex = 121;
+                    int curindex = 123;
                     while (!module.Equals(IDList.phrases[curindex].ToLowerInvariant()))
                     {
                         curindex -= 2;
@@ -941,7 +941,7 @@ public class hyperlinkScript : MonoBehaviour {
                             curindex = 245;
                         ctleft++;
                     }
-                    curindex = 121;
+                    curindex = 123;
                     while (!module.Equals(IDList.phrases[curindex].ToLowerInvariant()))
                     {
                         curindex += 2;
