@@ -313,7 +313,7 @@ public class hyperlinkScript : MonoBehaviour {
                 RGB[1].GetComponent<Renderer>().material = OtherMats[2];
                 RGB[2].GetComponent<Renderer>().material = OtherMats[2];
                 selectedIcon = 61;
-                Back.GetComponent<Renderer>().material = IconMats[60];
+                Back.GetComponent<Renderer>().material = IconMats[61];
             }
             else if (step == 0)
             {
